@@ -2,33 +2,45 @@
 import math
 import sys
 
-while True:
-	try:
-		s=input()
-	except EOFError:
-		break
+def error(str, exitcode=1):
+	print(sys.argv[0] + ": error: " + str, file=sys.stderr)
+	exit(exitcode)
 
-	s=[int(i) for i in s.split()]
-	if math.modf(math.sqrt(len(s)))[0]!=0:
-		print("error: invalid length of input line", file=sys.stderr)
-		exit(1)
-	Ceilings=len(s)
-	X=int(math.sqrt(Ceilings))
-
+def mod_figure_width(n):
 	width=1
-	ma=max(s)
-	mi=min(s)
-	i=max(ma, abs(mi))
-	if i==abs(mi) and mi<0:
-		width+=1
-	while i>=10:
-		i/=10
+	# if the number is negative, 1 should be added to width for the '-' sign
+	if n<0:
 		width+=1
 
-	print(("+" + "-"*width)*X + "+")
-	for i in range(Ceilings):
-		print("|%*d"%(width, s[i]), end='')
-		if i%X==X-1:
-			print("|")
-			print(("+" + "-"*width)*X + "+")
-	print("-"*12)
+	n=abs(n)
+
+	while n>=10:
+		n/=10
+		width+=1
+
+	return width
+
+def main():
+	while True:
+		try:
+			s=input()
+		except EOFError:
+			break
+
+		s=[int(i) for i in s.split()]
+		if math.modf(math.sqrt(len(s)))[0]!=0:
+			error("invalid length of input line")
+		Ceilings=len(s)
+		X=int(math.sqrt(Ceilings))
+
+		width=max(mod_figure_width(max(s)), mod_figure_width(min(s)))
+
+		print(("+" + "-"*width)*X + "+")
+		for i in range(Ceilings):
+			print("|%*d"%(width, s[i]), end='')
+			if i%X==X-1:
+				print("|\n" + ("+" + "-"*width)*X + "+")
+		print("-"*12)
+
+if __name__=='__main__':
+	main()
