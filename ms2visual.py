@@ -27,8 +27,11 @@ def main():
 		except EOFError:
 			break
 
-		s=[int(i) for i in s.split()]
-		if len(s)==0 or math.modf(math.sqrt(len(s)))[0]!=0:
+		s=s.split()
+		if len(s)==0:
+			continue
+		s=[int(i) for i in s]
+		if math.modf(math.sqrt(len(s)))[0]!=0:
 			error("invalid length of input line: " + str(len(s)))
 		Ceilings=len(s)
 		X=int(math.sqrt(Ceilings))
